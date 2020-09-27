@@ -38,6 +38,10 @@ $ sudo ./grakn server start
 ```
 $ ./grakn console -k ah_shelf -f ~/AH_shelf_grakn/src/Storeshelf_estimation_GraknAI/grakn_KB/schema.gql
 ```
+The schema of the shelf looks like this 
+
+![schema](images/schema.png)
+
 5. For visualization open grakn workbase 
 ```
 $ ./grakn-workbase
