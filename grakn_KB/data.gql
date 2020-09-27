@@ -1,0 +1,16 @@
+insert
+$Shelf isa Shelf, 
+    has shelf_id 1, 
+    has total_capacity 4,
+    has width 2,
+    has depth 2;
+$Product-type isa Product-type,
+has product_type "milk";
+$position1 isa Position, has pos_x 1, has pos_y 2;
+$position2 isa Position, has pos_x 2, has pos_y 1; 
+$Pose1(position_:$position1) isa POSE_relation;
+$Pose2(position_:$position2) isa POSE_relation;
+$OBJECT1 (pose_:$Pose1 ,shelf_:$Shelf,product_:$Product-type) isa OBJECT_relation,has action_execution "noaction";
+$OBJECT2 (pose_:$Pose2 ,shelf_:$Shelf,product_:$Product-type) isa OBJECT_relation, has action_execution "noaction";
+$man1 isa Manipulability, has manipulability false;
+$man2 isa Manipulability, has manipulability true;

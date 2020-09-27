@@ -1,0 +1,106 @@
+define
+
+Shelf sub entity,
+	has shelf_id,
+	has total_capacity,
+	has free_space,
+	has width,
+	has depth,
+	plays shelf_;
+
+Product-type sub entity,
+	has product_type,
+	plays product_;
+
+Position sub entity,
+	has pos_x,
+	has pos_y,
+	has pos_z,
+	plays position_;
+
+Orientation sub entity,
+	has roll,
+	has pitch,
+	has yaw,
+	plays orientation_;
+
+Manipulability sub entity,
+	has manipulability,
+	plays manipulability_;
+
+roll sub attribute, value double;
+pitch sub attribute, value double;
+yaw sub attribute, value double;
+width sub attribute, value double;
+depth sub attribute, value double;
+pos_x sub attribute, value double;
+pos_y sub attribute, value double;
+pos_z sub attribute, value double;
+product_type sub attribute, value string;
+manipulability sub attribute, value boolean;
+detectionmethod sub attribute, value string, regex "^(sight|inference)$";
+action_execution sub attribute, value string, regex "^(successful|unsuccessful|noaction)$";
+shelf_id sub attribute, value double;
+total_capacity sub attribute, value double;
+free_space sub attribute, value double;
+
+OBJECT_relation sub relation,
+	has detectionmethod,
+	has action_execution,
+	relates pose_,
+	plays object_,
+	relates shelf_,
+	relates product_;
+
+
+OBJECT_manipulability sub relation,
+	relates manipulability_,
+	relates object_;
+
+
+POSE_relation sub relation,
+	plays pose_,
+	relates position_,
+	relates orientation_;
+
+
+manipulability_constraint-1 sub  rule,
+		when {
+			$obj(pose_:$pose,shelf_:$shelf,product_:$product_) isa OBJECT_relation;
+			$pose(position_:$position) isa POSE_relation;
+			$position has pos_y $pos_y;
+			$shelf has depth $depth;
+			$pos_y >= $depth; 
+			$man isa Manipulability, has manipulability $manipulability;
+			$manipulability == false;
+		}, then {
+			(manipulability_:$man, object_:$obj) isa OBJECT_manipulability;
+		};
+
+manipulability_constraint-2 sub  rule,
+		when {
+			$obj(pose_:$pose,shelf_:$shelf,product_:$product_) isa OBJECT_relation, has action_execution $exe;
+			$pose(position_:$position) isa POSE_relation;
+			$position has pos_y $pos_y;
+			$shelf has depth $depth;
+			$pos_y < $depth; 
+			$exe "unsuccessful";
+			$man isa Manipulability, has manipulability $manipulability;
+			$manipulability == false;
+		}, then {
+			(manipulability_:$man, object_:$obj) isa OBJECT_manipulability;
+		};
+	
+manipulability_constraint-3 sub  rule,
+		when {
+			$obj(pose_:$pose,shelf_:$shelf,product_:$product_) isa OBJECT_relation, has action_execution $exe;
+			$pose(position_:$position) isa POSE_relation;
+			$position has pos_y $pos_y;
+			$shelf has depth $depth;
+			$pos_y < $depth; 
+			$exe like "(successful|noaction)";
+			$man isa Manipulability, has manipulability $manipulability;
+			$manipulability == true;
+		}, then {
+			(manipulability_:$man, object_:$obj) isa OBJECT_manipulability;
+		};

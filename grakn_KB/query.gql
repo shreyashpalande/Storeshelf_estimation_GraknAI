@@ -1,0 +1,29 @@
+match
+$obj(pose_:$pose,shelf_:$shelf,product_:$product_) isa OBJECT_relation, has action_execution $exe;
+			$pose(position_:$position) isa POSE_relation;
+			$position has pos_y 1;
+
+delete $obj has action_execution $exe;
+
+match
+$obj(pose_:$pose,shelf_:$shelf,product_:$product_) isa OBJECT_relation;
+			$pose(position_:$position) isa POSE_relation;
+			$position has pos_y 1;
+
+insert $obj has action_execution "unsuccessful";
+
+# match 
+# $Shelf isa Shelf, 
+#     has shelf_id $x1, 
+#     has total_capacity $x2,
+#     has width $x3,
+#     has depth $x4;
+# $Product-type isa Product-type,
+#     has product_type $x5;
+# $position1 isa Position, has pos_x $x6, has pos_y $x7;
+# $Pose1(position_:$position1) isa POSE_relation;
+# $OBJECT (pose_:$Pose1 ,shelf_:$Shelf,product_:$Product-type) isa OBJECT_relation,has action_execution $x8;
+# $man isa Manipulability, has manipulability $x9;
+# $x10(manipulability_:$man, object_:$OBJECT) isa OBJECT_manipulability;
+# get;
+
